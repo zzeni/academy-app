@@ -6,13 +6,21 @@ class Student < ApplicationRecord
 
   def attend(course)
     raise Error::CourseFullError if course.complete?
-
-    courses_in_the_same_category = courses.where(category_id: course.category_id)
-    raise Error::TooManyCoursesAtATimeError if courses.size >= 2
-
-    max_lvel_for_category = courses_in_the_same_category.maximum(:level)
-    raise Error::NotEligibleForCourseError if course.level - 1 > (max_lvel_for_category||0)
+    raise Error::TooManyCoursesAtATimeError if actual_courses.size >= 2
+    raise Error::NotEligibleForCourseError if course.level - 1 > (max_level_for_category(course.category)||0)
 
     courses << course
+  end
+
+  private
+  def actual_courses
+    courses.all.select do |course|
+      course.actual?
+    end
+  end
+
+  def max_level_for_category(category)
+    courses_in_the_same_category = courses.where(category_id: category.id)
+    courses_in_the_same_category.maximum(:level)
   end
 end
