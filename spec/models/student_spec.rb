@@ -74,17 +74,6 @@ RSpec.describe Student, type: :model do
       }.to raise_error(Error::TooManyCoursesAtATimeError)
     end
 
-    it 'should succeed if all is correct' do
-      student.courses = [other_course_other_cat]
-      student.save!
-
-      expect {
-        student.attend(course)
-      }.to change {
-        student.courses.count
-      }.by(1)
-    end
-
     it 'should succeed if student has attended unlimited other potential courses' do
       10.times do |i|
         Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student]
@@ -95,6 +84,37 @@ RSpec.describe Student, type: :model do
       }.to change {
         student.courses.count
       }.by(1)
+    end
+
+    context "when student has already enrolled in one other actual course" do
+      before(:each) do
+        student.courses = [other_course_other_cat]
+        student.save!
+      end
+
+      it 'should succeed if all is correct' do
+        expect {
+          student.attend(course)
+        }.to change {
+          student.courses.count
+        }.by(1)
+      end
+
+      it 'should unsubscribe the student from all other potential courses if the current course is actual' do
+        10.times do |i|
+          Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student]
+        end
+
+        course.update_attribute :min_participants, 1
+
+        expect {
+          student.attend(course)
+        }.to change {
+          student.courses.count
+        }.by(-9)
+
+        expect(student.courses.map(&:id)).to match_array([other_course_other_cat.id, course.id])
+      end
     end
   end
 end
