@@ -1,4 +1,6 @@
 class Student < ApplicationRecord
+  MAX_ACTUAL_COURSES = 2
+
   has_and_belongs_to_many :courses
 
   validates :first_name, presence: true, length: { in: 3..15 }
@@ -6,10 +8,14 @@ class Student < ApplicationRecord
 
   def attend(course)
     raise Error::CourseFullError if course.complete?
-    raise Error::TooManyCoursesAtATimeError if actual_courses.size >= 2
+    raise Error::TooManyCoursesAtATimeError if actual_courses.size >= MAX_ACTUAL_COURSES
     raise Error::NotEligibleForCourseError if course.level - 1 > (max_level_for_category(course.category)||0)
 
     courses << course
+
+    if actual_courses.size >= MAX_ACTUAL_COURSES
+      courses.delete(courses.all - actual_courses)
+    end
   end
 
   private

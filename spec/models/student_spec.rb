@@ -113,6 +113,7 @@ RSpec.describe Student, type: :model do
           student.courses.count
         }.by(-9)
 
+        expect(Course.count).to eq(12)
         expect(student.courses.map(&:id)).to match_array([other_course_other_cat.id, course.id])
       end
     end
