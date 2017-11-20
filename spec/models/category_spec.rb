@@ -12,9 +12,15 @@ RSpec.describe Category, type: :model do
     end
 
     it 'should error if name is not provided' do
-      category.first_name = nil
+      category.name = nil
       expect(category.save).to eq(false)
       expect(category.errors.first).to eq([:name, "can't be blank"])
+    end
+
+    it 'should error if the name longer than 30 characters' do
+      category.name = 'A'*31
+      expect(category.save).to eq(false)
+      expect(category.errors.first).to eq([:name, "is too long (maximum is 30 characters)"])
     end
   end
 end
