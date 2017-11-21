@@ -4,7 +4,7 @@ category_names.each do |name|
   Category.create! name: name
 end
 
-programming_courses = ["Ruby Programming", "Ruby on Rails", "Pyton for ninjas"]
+programming_courses = ["Ruby Programming", "Ruby on Rails", "Python for ninjas"]
 
 programming_courses.each do |name|
   [1, 2, 3].each do |level|

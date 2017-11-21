@@ -36,6 +36,39 @@ RSpec.describe Course, type: :model do
       expect(course.save).to eq(false)
       expect(course.errors.first).to eq([:category, "must exist"])
     end
+
+    context "when another course with the same name exists" do
+      let!(:other_course) {
+        Course.create!(name: course.name, category: category, level: course.level)
+      }
+
+      context "in a different category" do
+        before(:each) do
+          other_course.category = Category.create!(name: "Other category")
+          other_course.save!
+        end
+
+        it "should not conflict" do
+          expect(course.save).to eq(true)
+          expect(course.errors.size).to eq(0)
+          expect(course.persisted?).to eq(true)
+        end
+      end
+
+      context "in the same category" do
+        it 'should error if has the same level' do
+          expect(course.save).to eq(false)
+          expect(course.errors.first).to eq([:name, "has already been taken"])
+        end
+
+        it 'should not conflict if has a different level' do
+          course.level += 1
+          expect(course.save).to eq(true)
+          expect(course.errors.size).to eq(0)
+          expect(course.persisted?).to eq(true)
+        end
+      end
+    end
   end
 
   context '#complete?' do

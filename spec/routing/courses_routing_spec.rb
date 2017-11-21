@@ -35,5 +35,9 @@ RSpec.describe CoursesController, type: :routing do
       expect(:delete => "/courses/1").to route_to("courses#destroy", :id => "1")
     end
 
+    it "routes to students#index" do
+      expect(:get => "/courses/1/students#index").to route_to("students#index", :course_id => "1")
+    end
+
   end
 end
