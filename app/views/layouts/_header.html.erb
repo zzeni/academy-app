@@ -3,7 +3,7 @@
     <ul class="nav nav-pills float-right">
       <% %w(courses students categories).each do |controller| %>
       <li class="nav-item">
-        <%= link_to controller.capitalize, url_for(controller), class: "nav-link #{'active' if controller_name == controller}" %>
+        <%= link_to controller.capitalize, url_for(controller: controller), class: "nav-link #{'active' if controller_name == controller}" %>
       </li>
       <% end %>
     </ul>
