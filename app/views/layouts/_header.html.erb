@@ -1,16 +1,11 @@
 <header class="header mt-3">
   <nav>
     <ul class="nav nav-pills float-right">
-      <li>
-        <!-- <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a> -->
-        <%= link_to 'Courses', courses_path, class: 'nav-link' %>
-      </li>
+      <% %w(courses students categories).each do |controller| %>
       <li class="nav-item">
-        <%= link_to 'Students', students_path, class: 'nav-link' %>
+        <%= link_to controller.capitalize, url_for(controller), class: "nav-link #{'active' if controller_name == controller}" %>
       </li>
-      <li class="nav-item">
-        <%= link_to 'Categories', categories_path, class: 'nav-link' %>
-      </li>
+      <% end %>
     </ul>
   </nav>
   <h1 class="text-muted">Academy App</h1>
