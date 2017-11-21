@@ -37,6 +37,12 @@ RSpec.describe Course, type: :model do
       expect(course.errors.first).to eq([:category, "must exist"])
     end
 
+    it 'should error if the level is not one of 1, 2, 3' do
+      course.level = 4
+      expect(course.save).to eq(false)
+      expect(course.errors.first).to eq([:level, "must be less than or equal to 3"])
+    end
+
     context "when another course with the same name exists" do
       let!(:other_course) {
         Course.create!(name: course.name, category: category, level: course.level)

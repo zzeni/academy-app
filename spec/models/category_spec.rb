@@ -22,5 +22,11 @@ RSpec.describe Category, type: :model do
       expect(category.save).to eq(false)
       expect(category.errors.first).to eq([:name, "is too long (maximum is 30 characters)"])
     end
+
+    it 'should error if name is duplicated' do
+      Category.create!(name: category.name)
+      expect(category.save).to eq(false)
+      expect(category.errors.first).to eq([:name, "has already been taken"])
+    end
   end
 end
