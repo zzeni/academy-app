@@ -18,7 +18,7 @@
 
   <div class="field">
     <%= form.label :category_id %>
-    <%= form.number_field :category_id, id: :course_category_id %>
+    <%= form.collection_select :category_id, Category.all, :id, :name, id: :course_category_id %>
   </div>
 
   <div class="field">
@@ -32,6 +32,6 @@
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary btn-sm' %>
   </div>
 <% end %>

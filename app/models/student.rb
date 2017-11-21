@@ -7,9 +7,9 @@ class Student < ApplicationRecord
   validates :last_name, presence: true, length: { in: 3..15 }
 
   def attend(course)
-    raise Error::CourseFullError if course.complete?
-    raise Error::TooManyCoursesAtATimeError if actual_courses.size >= MAX_ACTUAL_COURSES
-    raise Error::NotEligibleForCourseError if course.level - 1 > (max_level_for_category(course.category)||0)
+    raise Error::CourseFullError.new if course.complete?
+    raise Error::TooManyCoursesAtATimeError.new if actual_courses.size >= MAX_ACTUAL_COURSES
+    raise Error::NotEligibleForCourseError.new if course.level - 1 > (max_level_for_category(course.category)||0)
 
     courses << course
 
