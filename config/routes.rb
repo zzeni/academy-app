@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     post :attend, on: :member
     get :active, on: :collection
   end
-  resources :categories, only: [:index, :show] do
+  resources :categories, except: :destroy do
     resources :courses, only: :index
   end
   resources :students do
