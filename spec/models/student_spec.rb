@@ -39,8 +39,8 @@ RSpec.describe Student, type: :model do
     let(:category1) { Category.create!(name: "Bla Bla Bla") }
     let(:category2) { Category.create!(name: "Ala Bala") }
     let(:course) { Course.new(name: "Course 1", level: 1, category: category1 ) }
-    let(:other_course_same_cat) { Course.new(name: "Course 1", level: 1, category: category1 ) }
-    let(:other_course_other_cat) { Course.new(name: "Course 1", level: 1, category: category2 ) }
+    let(:other_course_same_cat) { Course.new(name: "Course 2", level: 1, category: category1 ) }
+    let(:other_course_other_cat) { Course.new(name: "Course 3", level: 1, category: category2 ) }
 
     before(:each) {
       student.save!
@@ -76,7 +76,7 @@ RSpec.describe Student, type: :model do
 
     it 'should succeed if student has attended unlimited other potential courses' do
       10.times do |i|
-        Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student]
+        Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student], level: 1
       end
 
       expect {
@@ -102,7 +102,7 @@ RSpec.describe Student, type: :model do
 
       it 'should unsubscribe the student from all other potential courses if the current course is actual' do
         10.times do |i|
-          Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student]
+          Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student], level: 1
         end
 
         course.update_attribute :min_participants, 1
