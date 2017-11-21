@@ -4,6 +4,7 @@ class Course < ApplicationRecord
 
   validates :name, presence: true, length: { in: 3..50 }
   validates :category_id, presence: true
+  validates :name, uniqueness: [scope: [:level, :category_id]]
 
   def complete?
     max_participants.present? && students.count >= max_participants
