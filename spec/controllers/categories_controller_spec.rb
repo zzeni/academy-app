@@ -6,11 +6,11 @@ RSpec.describe CategoriesController, type: :controller do
   # Category. As you add validations to Category, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { name: "Awesome Category" }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "Awesome Category that has a too long name" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -73,15 +73,13 @@ RSpec.describe CategoriesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) {{ name: "Nomer 1" }}
 
       it "updates the requested category" do
         category = Category.create! valid_attributes
         put :update, params: {id: category.to_param, category: new_attributes}, session: valid_session
         category.reload
-        skip("Add assertions for updated state")
+        expect(category.name).to eq("Nomer 1")
       end
 
       it "redirects to the category" do
@@ -99,20 +97,4 @@ RSpec.describe CategoriesController, type: :controller do
       end
     end
   end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested category" do
-      category = Category.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: category.to_param}, session: valid_session
-      }.to change(Category, :count).by(-1)
-    end
-
-    it "redirects to the categories list" do
-      category = Category.create! valid_attributes
-      delete :destroy, params: {id: category.to_param}, session: valid_session
-      expect(response).to redirect_to(categories_url)
-    end
-  end
-
 end
