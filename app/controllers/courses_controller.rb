@@ -47,8 +47,18 @@ class CoursesController < ApplicationController
 
   def attend
     @student = Student.find(params[:student_id])
-    @student.attend(@course)
-    render :show
+
+    begin
+      @student.attend!(@course)
+
+      flash[:notice] = "Successfully enrolled in course"
+      render :show
+
+    rescue Error::ApplicationError => error
+      flash[:alert] = error.message
+      render :show
+    end
+
   end
 
   private

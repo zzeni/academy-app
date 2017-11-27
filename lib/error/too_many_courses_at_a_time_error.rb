@@ -1,8 +1,7 @@
 module Error
-  class TooManyCoursesAtATimeError < StandardError
-    def initialize
+  class TooManyCoursesAtATimeError < ApplicationError
+    def initialize(message = "The student cannot attend more courses")
       super
-      message = "The student can't attend more courses"
     end
   end
 end

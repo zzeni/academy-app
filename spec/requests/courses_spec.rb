@@ -6,8 +6,8 @@ RSpec.describe "Courses", type: :request do
     let(:student) { Student.create!(first_name: "Ala", last_name: "Bala") }
     let(:category1) { Category.create!(name: "Bla Bla Bla") }
     let(:category2) { Category.create!(name: "Ala Bala") }
-    let(:other_course_same_cat) { Course.new(name: "Course 2", level: 1, category: category1 ) }
-    let(:other_course_other_cat) { Course.new(name: "Course 3", level: 1, category: category2 ) }
+    let(:other_course_same_cat) { Course.new(name: "Course 2", level: 1, category: category1, min_participants: 0 ) }
+    let(:other_course_other_cat) { Course.new(name: "Course 3", level: 1, category: category2, min_participants: 0 ) }
 
     let(:path) { "/courses/#{course.id}/attend" }
 
@@ -16,7 +16,6 @@ RSpec.describe "Courses", type: :request do
 
       post path, params: { student_id: student.id }
 
-      expect(response).to render_template(:show)
       expect(course.students.size).to eq(0)
       expect(response.body).to include(Error::CourseFullError.new.message)
     end
@@ -27,7 +26,6 @@ RSpec.describe "Courses", type: :request do
 
       post path, params: { student_id: student.id }
 
-      expect(response).to render_template(:show)
       expect(course.students.size).to eq(0)
       expect(response.body).to include(Error::NotEligibleForCourseError.new.message)
     end
@@ -38,7 +36,6 @@ RSpec.describe "Courses", type: :request do
 
       post path, params: { student_id: student.id }
 
-      expect(response).to render_template(:show)
       expect(course.students.size).to eq(0)
       expect(response.body).to include(Error::TooManyCoursesAtATimeError.new.message)
     end
@@ -67,6 +64,7 @@ RSpec.describe "Courses", type: :request do
         post path, params: { student_id: student.id }
         expect(student.courses).to include(course)
         expect(course.students).to eq([student])
+        expect(response.body).to include('Successfully enrolled in course')
       end
 
       it 'should unsubscribe the student from all other potential courses if the current course is actual' do
@@ -74,7 +72,7 @@ RSpec.describe "Courses", type: :request do
           Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student], level: 1
         end
 
-        course.update :min_participants, 1
+        course.update min_participants: 1
 
         post path, params: { student_id: student.id }
 
@@ -82,6 +80,7 @@ RSpec.describe "Courses", type: :request do
         expect(student.courses).to include(course)
         expect(course.students).to eq([student])
         expect(student.courses.map(&:id)).to match_array([other_course_other_cat.id, course.id])
+        expect(response.body).to include('Successfully enrolled in course')
       end
     end
   end
