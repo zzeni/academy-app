@@ -114,4 +114,20 @@ RSpec.describe CoursesController, type: :controller do
     end
   end
 
+  describe "POST #attend" do
+    let(:student) { Student.create! first_name: "Ala", last_name: "Bala" }
+    let(:course) { Course.create! valid_attributes }
+
+    it "enrolls a student in the course" do
+      expect {
+        post :attend, params: {id: course.to_param, student_id: student.id}, session: valid_session
+      }.to change(course.students, :count).by(1)
+    end
+
+    it "redirects to the student" do
+        post :attend, params: {id: course.to_param, student_id: student.id}, session: valid_session
+      expect(response).to redirect_to(student)
+    end
+  end
+
 end

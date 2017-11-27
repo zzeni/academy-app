@@ -6,7 +6,7 @@ RSpec.describe Course, type: :model do
   let!(:student2) { Student.create!(first_name: 'Baba', last_name: 'Tii') }
   let(:course) { Course.new(name: "Course 1", level: 1, category: category ) }
 
-  context '::save' do
+  context '#save' do
     it 'should save the category if all params are correct' do
       expect(course.save).to eq(true)
       expect(course.errors.size).to eq(0)
@@ -132,6 +132,36 @@ RSpec.describe Course, type: :model do
       it "should be false" do
         expect(course.potential?).to be(false)
       end
+    end
+  end
+
+  context '::actual' do
+    before(:each) do
+      course.save!
+    end
+
+    it "should not select courses that have not set min_participants" do
+      expect(Course.actual.to_a.size).to eq(0)
+    end
+
+    it "should select courses that have min_participants set to 0" do
+      course.update(min_participants: 0)
+      expect(Course.actual.to_a.size).to eq(1)
+    end
+
+    it "should select courses that have min_participants set to positive number and at least same number of students enrolled" do
+      course.update(min_participants: 2)
+      course.students << student1
+      course.students << student2
+
+      expect(Course.actual.to_a.size).to eq(1)
+    end
+
+    it "should not select courses that have min_participants set to positive number and not as much students enrolled" do
+      course.update(min_participants: 2)
+      course.students << student1
+
+      expect(Course.actual.to_a.size).to eq(0)
     end
   end
 end

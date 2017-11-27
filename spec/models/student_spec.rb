@@ -35,7 +35,7 @@ RSpec.describe Student, type: :model do
     end
   end
 
-  describe '#attend' do
+  describe '#attend!' do
     let(:category1) { Category.create!(name: "Bla Bla Bla") }
     let(:category2) { Category.create!(name: "Ala Bala") }
     let(:course) { Course.new(name: "Course 1", level: 1, category: category1 ) }
@@ -47,30 +47,27 @@ RSpec.describe Student, type: :model do
     }
 
     it 'should error if the course is complete' do
-      course.max_participants = 0
-      course.save!
+      course.update max_participants: 0
       expect {
-        student.attend(course)
+        student.attend!(course)
       }.to raise_error(Error::CourseFullError)
     end
 
     it 'should error if the course is too difficult for the student' do
-      course.level = 3
-      course.save!
-      student.courses = [other_course_same_cat]
-      student.save!
+      course.update level: 3
+      student.courses << other_course_same_cat
 
       expect {
-        student.attend(course)
+        student.attend!(course)
       }.to raise_error(Error::NotEligibleForCourseError)
     end
 
     it 'should error if the student has already attended two other actual courses' do
-      student.courses = [other_course_same_cat, other_course_other_cat]
-      student.save!
+      student.courses << other_course_same_cat
+      student.courses << other_course_other_cat
 
       expect {
-        student.attend(course)
+        student.attend!(course)
       }.to raise_error(Error::TooManyCoursesAtATimeError)
     end
 
@@ -80,7 +77,7 @@ RSpec.describe Student, type: :model do
       end
 
       expect {
-        student.attend(course)
+        student.attend!(course)
       }.to change {
         student.courses.count
       }.by(1)
@@ -88,13 +85,12 @@ RSpec.describe Student, type: :model do
 
     context "when student has already enrolled in one other actual course" do
       before(:each) do
-        student.courses = [other_course_other_cat]
-        student.save!
+        student.courses << other_course_other_cat
       end
 
       it 'should succeed if all is correct' do
         expect {
-          student.attend(course)
+          student.attend!(course)
         }.to change {
           student.courses.count
         }.by(1)
@@ -105,10 +101,10 @@ RSpec.describe Student, type: :model do
           Course.create! name: "Other course #{i}", category: category1, min_participants: 2, students: [student], level: 1
         end
 
-        course.update_attribute :min_participants, 1
+        course.update min_participants: 1
 
         expect {
-          student.attend(course)
+          student.attend!(course)
         }.to change {
           student.courses.count
         }.by(-9)

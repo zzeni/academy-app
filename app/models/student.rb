@@ -1,3 +1,7 @@
+require_relative '../../lib/error/course_full_error.rb'
+require_relative '../../lib/error/not_eligible_for_course_error.rb'
+require_relative '../../lib/error/too_many_courses_at_a_time_error.rb'
+
 class Student < ApplicationRecord
   MAX_ACTUAL_COURSES = 2
 
@@ -6,7 +10,7 @@ class Student < ApplicationRecord
   validates :first_name, presence: true, length: { in: 3..15 }
   validates :last_name, presence: true, length: { in: 3..15 }
 
-  def attend(course)
+  def attend!(course)
     raise Error::CourseFullError.new if course.complete?
     raise Error::TooManyCoursesAtATimeError.new if actual_courses.size >= MAX_ACTUAL_COURSES
     raise Error::NotEligibleForCourseError.new if course.level - 1 > (max_level_for_category(course.category)||0)

@@ -1,5 +1,7 @@
+require_relative '../../lib/error/application_error.rb'
+
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :set_course, only: [:show, :edit, :update, :destroy, :attend]
 
   # GET /courses
   def index
@@ -43,6 +45,20 @@ class CoursesController < ApplicationController
   def destroy
     @course.destroy
     redirect_to courses_url, notice: 'Course was successfully destroyed.'
+  end
+
+  def attend
+    @student = Student.find(params[:student_id])
+
+    begin
+      @student.attend!(@course)
+
+      redirect_to @student, notice: "Successfully enrolled in course"
+
+    rescue Error::ApplicationError => error
+      redirect_to @student, alert: error.message
+    end
+
   end
 
   private

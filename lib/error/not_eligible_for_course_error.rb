@@ -1,8 +1,9 @@
+require_relative './application_error.rb'
+
 module Error
-  class NotEligibleForCourseError < StandardError
-    def initialize
+  class NotEligibleForCourseError < ApplicationError
+    def initialize(message = "The chosen course is too difficult for the student")
       super
-      message = "The chosen course is too difficult for the student"
     end
   end
 end

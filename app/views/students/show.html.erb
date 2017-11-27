@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>First name:</strong>
   <%= @student.first_name %>
@@ -10,5 +8,21 @@
   <%= @student.last_name %>
 </p>
 
+
 <%= link_to 'Edit', edit_student_path(@student) %> |
 <%= link_to 'Back', students_path %>
+
+
+<div class="card card-outline-primary mt-3">
+  <h4 class="card-header card-inverse card-primary">Enrolled Courses</h4>
+  <div class="card-block">
+    <%= render 'courses', student: @student, courses: @student.courses %>
+  </div>
+</div>
+
+<div class="card card-outline-primary mt-3">
+  <h4 class="card-header card-inverse card-info">All Courses</h4>
+  <div class="card-block">
+    <%= render 'courses', student: @student, courses: @all_courses - @student.courses %>
+  </div>
+</div>

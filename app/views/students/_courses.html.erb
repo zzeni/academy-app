@@ -1,0 +1,31 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Level</th>
+    <th>Category</th>
+    <th>Confirmed</th>
+    <th>Actions</th>
+  </tr>
+  <% courses.each do |course| %>
+    <tr>
+      <td><%= course.name %></td>
+      <td><%= course.level %></td>
+      <td><%= course.category.name %></td>
+      <td><%= course.actual? %></td>
+      <td>
+        <%= link_to course, class: 'btn', title: 'View course' do %>
+          <i class="fa fa-eye"></i>
+        <% end %>
+        <% if student.courses.include?(course) %>
+          <%= link_to exit_course_path(course, student_id: student.id), method: :post, data: { confirm: 'Are you sure?' }, class: 'btn', title: 'Exit course' do %>
+            <i class="fa fa-sign-out"></i></a>
+          <% end %>
+        <% else %>
+          <%= link_to attend_course_path(course, student_id: student.id), method: :post, class: 'btn', title: 'Enroll in course' do %>
+            <i class="fa fa-sign-in"></i></a>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

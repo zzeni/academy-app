@@ -1,8 +1,9 @@
+require_relative './application_error.rb'
+
 module Error
-  class CourseFullError < StandardError
-    def initialize
+  class CourseFullError < ApplicationError
+    def initialize(message = "Course is complete")
       super
-      message = "Course is complete"
     end
   end
 end
