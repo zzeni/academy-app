@@ -1,3 +1,5 @@
+require_relative '../../lib/error/application_error.rb'
+
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy, :attend]
 
@@ -51,12 +53,10 @@ class CoursesController < ApplicationController
     begin
       @student.attend!(@course)
 
-      flash[:notice] = "Successfully enrolled in course"
-      render :show
+      redirect_to @student, notice: "Successfully enrolled in course"
 
     rescue Error::ApplicationError => error
-      flash[:alert] = error.message
-      render :show
+      redirect_to @student, alert: error.message
     end
 
   end

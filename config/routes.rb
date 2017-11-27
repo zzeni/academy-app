@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :courses do
     resources :students, only: :index
     post :attend, on: :member
-    get :active, on: :collection
+    post :exit, on: :member
   end
   resources :categories, except: :destroy do
     resources :courses, only: :index

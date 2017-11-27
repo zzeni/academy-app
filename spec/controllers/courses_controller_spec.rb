@@ -124,9 +124,9 @@ RSpec.describe CoursesController, type: :controller do
       }.to change(course.students, :count).by(1)
     end
 
-    it "redirects to the course" do
+    it "redirects to the student" do
         post :attend, params: {id: course.to_param, student_id: student.id}, session: valid_session
-      expect(response).to be_success
+      expect(response).to redirect_to(student)
     end
   end
 

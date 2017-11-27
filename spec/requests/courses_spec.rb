@@ -17,7 +17,7 @@ RSpec.describe "Courses", type: :request do
       post path, params: { student_id: student.id }
 
       expect(course.students.size).to eq(0)
-      expect(response.body).to include(Error::CourseFullError.new.message)
+      expect(flash.alert).to eq(Error::CourseFullError.new.message)
     end
 
     it 'should error if the course is too difficult for the student' do
@@ -27,7 +27,7 @@ RSpec.describe "Courses", type: :request do
       post path, params: { student_id: student.id }
 
       expect(course.students.size).to eq(0)
-      expect(response.body).to include(Error::NotEligibleForCourseError.new.message)
+      expect(flash.alert).to eq(Error::NotEligibleForCourseError.new.message)
     end
 
     it 'should error if the student has already attended two other actual courses' do
@@ -37,7 +37,7 @@ RSpec.describe "Courses", type: :request do
       post path, params: { student_id: student.id }
 
       expect(course.students.size).to eq(0)
-      expect(response.body).to include(Error::TooManyCoursesAtATimeError.new.message)
+      expect(flash.alert).to eq(Error::TooManyCoursesAtATimeError.new.message)
     end
 
     it 'should succeed if student has attended unlimited other potential courses' do
@@ -52,7 +52,7 @@ RSpec.describe "Courses", type: :request do
       }.by(1)
 
       expect(course.students).to eq([student])
-      expect(response.body).to include('Successfully enrolled in course')
+      expect(flash.notice).to eq('Successfully enrolled in course')
     end
 
     context "when student has already enrolled in one other actual course" do
@@ -64,7 +64,7 @@ RSpec.describe "Courses", type: :request do
         post path, params: { student_id: student.id }
         expect(student.courses).to include(course)
         expect(course.students).to eq([student])
-        expect(response.body).to include('Successfully enrolled in course')
+        expect(flash.notice).to eq('Successfully enrolled in course')
       end
 
       it 'should unsubscribe the student from all other potential courses if the current course is actual' do
@@ -80,7 +80,7 @@ RSpec.describe "Courses", type: :request do
         expect(student.courses).to include(course)
         expect(course.students).to eq([student])
         expect(student.courses.map(&:id)).to match_array([other_course_other_cat.id, course.id])
-        expect(response.body).to include('Successfully enrolled in course')
+        expect(flash.notice).to eq('Successfully enrolled in course')
       end
     end
   end
