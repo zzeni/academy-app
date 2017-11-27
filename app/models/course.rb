@@ -2,6 +2,12 @@ class Course < ApplicationRecord
   belongs_to :category
   has_and_belongs_to_many :students
 
+  scope :actual, -> {
+    eager_load(:students)
+    .where('min_participants IS NOT ?', nil)
+    .group('courses.id')
+    .having('count(students.id) >= min_participants') }
+
   validates :name, presence: true, length: { in: 3..50 }
   validates :level, numericality: { only_integer: true,
                                     greater_than_or_equal_to: 1,
