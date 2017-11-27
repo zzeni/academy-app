@@ -126,7 +126,7 @@ RSpec.describe CoursesController, type: :controller do
 
     it "redirects to the course" do
         post :attend, params: {id: course.to_param, student_id: student.id}, session: valid_session
-      expect(response).to redirect_to(course)
+      expect(response).to be_success
     end
   end
 
