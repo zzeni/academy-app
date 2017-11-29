@@ -16,13 +16,3 @@
   </ul>
 
 </header>
-
-<nav>
-  <ul class="nav nav-tabs">
-    <% %w(courses students categories).each do |controller| %>
-    <li class="nav-item">
-      <%= link_to controller.capitalize, "/#{controller}/", class: "nav-link #{'active' if controller_name == controller}" %>
-    </li>
-    <% end %>
-  </ul>
-</nav>
