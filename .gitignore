@@ -23,5 +23,7 @@
 .byebug_history
 
 # Disregard test folder
-
 /test/**/*
+
+# Don't track Paperclip image files
+/public/system/**/*
