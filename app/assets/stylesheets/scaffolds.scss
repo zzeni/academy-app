@@ -1,9 +1,7 @@
-header .nav-pills a.nav-link {
-  color: #000;
-
-  &:hover, &.active {
-    color: #fff;
-    background-color: #000;
+header {
+  letter-spacing: 1%;
+  a {
+    margin: 1em;
   }
 }
 

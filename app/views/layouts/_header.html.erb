@@ -1,19 +1,7 @@
-<header class="header mt-3">
-  <nav>
-    <ul class="nav nav-pills float-right">
-      <% %w(courses students categories).each do |controller| %>
-      <li class="nav-item">
-        <%= link_to controller.capitalize, "/#{controller}/", class: "nav-link #{'active' if controller_name == controller}" %>
-      </li>
-      <% end %>
-    </ul>
-  </nav>
-
+<header class="header my-4 d-flex align-items-center justify-content-between">
   <h1 class="text-muted">Academy App</h1>
 
-  <div class="clearfix"></div>
-
-  <ul class="nav nav-pills float-right">
+  <ul class="nav nav-pills">
     <li class="nav-item">
       <% if student_signed_in? %>
         <%= link_to 'Profile', current_student %>
@@ -27,5 +15,14 @@
     </li>
   </ul>
 
-  <div class="clearfix"></div>
 </header>
+
+<nav>
+  <ul class="nav nav-tabs">
+    <% %w(courses students categories).each do |controller| %>
+    <li class="nav-item">
+      <%= link_to controller.capitalize, "/#{controller}/", class: "nav-link #{'active' if controller_name == controller}" %>
+    </li>
+    <% end %>
+  </ul>
+</nav>
