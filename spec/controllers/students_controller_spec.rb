@@ -5,6 +5,7 @@ RSpec.describe StudentsController, type: :controller do
   let(:valid_attributes) {{
     first_name: "Ala",
     last_name: "Bala",
+    email: 'user@example.com'
   }}
 
   let(:invalid_attributes) {{

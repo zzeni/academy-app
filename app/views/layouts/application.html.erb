@@ -15,16 +15,22 @@
     <div class="container">
       <%= render 'layouts/header' %>
 
-      <hr>
+      <% flash.each do |name, msg| %>
+          <%= content_tag(:div, msg, class: "alert alert-#{name == 'notice' ? 'info' : 'danger'}") %>
+      <% end %>
 
-      <main role="main">
+      <nav>
+        <ul class="nav nav-tabs">
+          <% %w(courses students categories).each do |controller| %>
+          <li class="nav-item">
+            <%= link_to controller.capitalize, "/#{controller}/", class: "nav-link #{'active' if controller_name == controller}" %>
+          </li>
+          <% end %>
+        </ul>
+      </nav>
 
-        <% flash.each do |name, msg| %>
-            <%= content_tag(:div, msg, class: "alert alert-#{name == 'notice' ? 'info' : 'danger'}") %>
-        <% end %>
-
+      <main role="main" class="tab-content">
         <%= yield %>
-
       </main>
 
       <footer class="footer">
