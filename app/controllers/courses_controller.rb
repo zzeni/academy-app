@@ -1,5 +1,3 @@
-require_relative '../../lib/error/application_error.rb'
-
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy, :attend, :exit]
   before_action :authenticate_admin!, except: [:index, :show, :attend, :exit]

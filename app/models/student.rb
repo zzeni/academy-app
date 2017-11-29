@@ -1,7 +1,3 @@
-require_relative '../../lib/error/course_full_error.rb'
-require_relative '../../lib/error/not_eligible_for_course_error.rb'
-require_relative '../../lib/error/too_many_courses_at_a_time_error.rb'
-
 class Student < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
