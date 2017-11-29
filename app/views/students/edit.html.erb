@@ -1,6 +1,8 @@
 <h2>Editing Student</h2>
 
-<%= render 'form', student: @student %>
+<%= form_with(model: @student, local: true) do |form| %>
+  <%= render 'form_fields', student: @student, form: form %>
+<% end %>
 
 <%= link_to 'Show', @student %> |
 <%= link_to 'Back', students_path %>

@@ -1,5 +1,7 @@
 <h2>New Student</h2>
 
-<%= render 'form', student: @student %>
+<%= form_with(model: @student, local: true, url: add_students_path, method: :post) do |form| %>
+  <%= render 'form_fields', student: @student, form: form %>
+<% end %>
 
 <%= link_to 'Back', students_path %>

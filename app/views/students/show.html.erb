@@ -1,19 +1,21 @@
-<%= image_tag @student.picture.url(:thumb) %>
 
-<p>
-  <strong>Email:</strong>
-  <%= @student.email %>
-</p>
+<article class="d-flex align-items-center">
+  <%= image_tag @student.picture.url(:medium) %>
+  <div>
+    <h4><%= @student.first_name %> <%= @student.last_name %></h4>
 
-<p>
-  <strong>First name:</strong>
-  <%= @student.first_name %>
-</p>
+    <p>
+      <strong>Email:</strong>
+      <%= @student.email %>
+    </p>
 
-<p>
-  <strong>Last name:</strong>
-  <%= @student.last_name %>
-</p>
+    <p>
+      <strong>Last login time:</strong>
+      <%= @student.last_sign_in_at ? l(@student.last_sign_in_at, { format: :long }) : 'never' %>
+    </p>
+
+  </div>
+</article>
 
 
 <%= link_to 'Edit', edit_student_path(@student) %> |
