@@ -26,8 +26,23 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+
+  config.action_controller.asset_host = 'http://localhost:3023'
+  config.action_mailer.asset_host = config.action_controller.asset_host
+
+  config.action_mailer.perform_caching = false
+
+  config.action_mailer.delivery_method = :smtp
+
+  # use mailcatcher gem for the mail: https://github.com/sj26/mailcatcher
+  config.action_mailer.smtp_settings = {
+    :address => "localhost",
+    :port => 1025
+  }
+  config.action_mailer.default_url_options = {
+    :host => 'http://localhost:3023/'
+  }
 
   config.action_mailer.perform_caching = false
 

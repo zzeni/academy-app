@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :students
   resources :courses do
     resources :students, only: :index
     post :attend, on: :member

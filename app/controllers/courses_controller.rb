@@ -1,7 +1,8 @@
 require_relative '../../lib/error/application_error.rb'
 
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :edit, :update, :destroy, :attend]
+  before_action :set_course, only: [:show, :edit, :update, :destroy, :attend, :exit]
+  before_action :authenticate_admin!, except: [:index, :show, :attend, :exit]
 
   # GET /courses
   def index
@@ -58,7 +59,17 @@ class CoursesController < ApplicationController
     rescue Error::ApplicationError => error
       redirect_to @student, alert: error.message
     end
+  end
 
+  def exit
+    @student = Student.find(params[:student_id])
+
+    if @course.students.include?(@student)
+      @course.students.delete @student
+      redirect_to @student, notice: "Successfully exited course"
+    else
+      redirect_to @student, alert: "The student is not in this course"
+    end
   end
 
   private

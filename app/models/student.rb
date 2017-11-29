@@ -3,9 +3,22 @@ require_relative '../../lib/error/not_eligible_for_course_error.rb'
 require_relative '../../lib/error/too_many_courses_at_a_time_error.rb'
 
 class Student < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
   MAX_ACTUAL_COURSES = 2
 
   has_and_belongs_to_many :courses
+
+  has_attached_file :picture,
+                    styles: { medium: "300x300#", thumb: "100x100#" },
+                    default_url: "/images/:style/missing.png"
+
+  validates_attachment :picture, presence: true,
+                       content_type: { content_type: "image/jpeg" },
+                       size: { in: 0..2.megabytes }
 
   validates :first_name, presence: true, length: { in: 3..15 }
   validates :last_name, presence: true, length: { in: 3..15 }
