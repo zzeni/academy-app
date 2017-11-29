@@ -8,6 +8,11 @@ class Course < ApplicationRecord
     .group('courses.id')
     .having('count(students.id) >= min_participants') }
 
+  scope :active, -> { where(
+    'start_time < :start AND end_time > :end',
+    { start: Time.now, end: Time.now }
+  ) }
+
   validates :name, presence: true, length: { in: 3..50 }
   validates :level, numericality: { only_integer: true,
                                     greater_than_or_equal_to: 1,
