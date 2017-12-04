@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-  let(:category) { Category.create!(name: "Bla Bla Bla") }
-  let!(:student1) { Student.create!(first_name: 'Baba', last_name: 'Mii') }
-  let!(:student2) { Student.create!(first_name: 'Baba', last_name: 'Tii') }
-  let(:course) { Course.new(name: "Course 1", level: 1, category: category ) }
+  let(:category) { Fabricate(:category) }
+  let!(:student1) { Fabricate(:student, email: 'user1@example.com') }
+  let!(:student2) { Fabricate(:student, email: 'user2@example.com') }
+  let(:course) { Fabricate.build(:course, level: 1, category: category ) }
 
   context '#save' do
     it 'should save the category if all params are correct' do
@@ -45,7 +45,7 @@ RSpec.describe Course, type: :model do
 
     context "when another course with the same name exists" do
       let!(:other_course) {
-        Course.create!(name: course.name, category: category, level: course.level)
+        Fabricate(:course, category: category, level: course.level)
       }
 
       context "in a different category" do

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Student, type: :model do
-  let(:student) { Student.new(first_name: 'Baba', last_name: 'Miii') }
+  let(:student) { Fabricate.build(:student) }
 
   describe "::save" do
     it 'should error if first_name is not specified' do

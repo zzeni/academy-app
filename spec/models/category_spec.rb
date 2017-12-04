@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Category, type: :model do
 
-  let(:category) { Category.new(name: 'The Best Category') }
+  let(:category) { Fabricate.build(:category, name: "Bla bla bla") }
 
   describe "::save" do
     it 'should save the category if all params are correct' do
@@ -24,7 +24,7 @@ RSpec.describe Category, type: :model do
     end
 
     it 'should error if name is duplicated' do
-      Category.create!(name: category.name)
+      Fabricate(:category, name: category.name)
       expect(category.save).to eq(false)
       expect(category.errors.first).to eq([:name, "has already been taken"])
     end
