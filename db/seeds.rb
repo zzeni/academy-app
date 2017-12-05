@@ -1,3 +1,10 @@
+require 'fabrication'
+require 'faker'
+
+Student.delete_all
+Course.delete_all
+Category.delete_all
+
 category_names = ["Programming", "Music", "Cooking", "Robots", "Tai-Chi"]
 
 category_names.each do |name|
@@ -16,3 +23,6 @@ programming_courses.each do |name|
   end
 end
 
+30.times do |i|
+  Fabricate(:student, email: "student_#{i}@example.com")
+end
