@@ -5,6 +5,7 @@ class Student < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   MAX_ACTUAL_COURSES = 2
+  ADMIN_EMAIL = "emanolova@gmail.com"
 
   has_and_belongs_to_many :courses
 
@@ -29,6 +30,10 @@ class Student < ApplicationRecord
     if actual_courses.size >= MAX_ACTUAL_COURSES
       courses.delete(courses.all - actual_courses)
     end
+  end
+
+  def admin?
+    email == ADMIN_EMAIL
   end
 
   private

@@ -4,13 +4,14 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_student!
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-
   private
 
   def authenticate_admin!
-    unless current_student && current_student.email == "emanolova@gmail.com"
-      redirect_to root_path, alert: "Insufficient privileges"
-    end
+    insufficient_privileges! unless current_student && current_student.admin?
+  end
+
+  def insufficient_privileges!
+    redirect_to root_path, alert: "Insufficient privileges"
   end
 
   protected
