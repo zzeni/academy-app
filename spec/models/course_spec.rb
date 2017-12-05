@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-  let(:category) { Category.create!(name: "Bla Bla Bla") }
-  let!(:student1) { Student.create!(first_name: 'Baba', last_name: 'Mii') }
-  let!(:student2) { Student.create!(first_name: 'Baba', last_name: 'Tii') }
-  let(:course) { Course.new(name: "Course 1", level: 1, category: category ) }
+  let(:category) { Fabricate(:category, name: "Bla bla bla") }
+  let(:student1) { Fabricate(:student, email: "student1@example.com") }
+  let(:student2) { Fabricate(:student, email: "student2@example.com") }
+  let(:course) { Fabricate.build(:course, name: "The course", category: category, level: 1) }
 
   context '#save' do
     it 'should save the category if all params are correct' do
@@ -45,12 +45,12 @@ RSpec.describe Course, type: :model do
 
     context "when another course with the same name exists" do
       let!(:other_course) {
-        Course.create!(name: course.name, category: category, level: course.level)
+        Fabricate(:course, name: course.name, category: category, level: course.level)
       }
 
       context "in a different category" do
         before(:each) do
-          other_course.category = Category.create!(name: "Other category")
+          other_course.category = Fabricate(:category)
           other_course.save!
         end
 
@@ -90,7 +90,7 @@ RSpec.describe Course, type: :model do
     end
 
     it "should be false if @max_participants is not set" do
-      course.update_attribute :max_participants, nil
+      course.update(max_participants: nil)
       expect(course.complete?).to be(false)
     end
   end
@@ -108,7 +108,7 @@ RSpec.describe Course, type: :model do
 
     context "when min_participants is set" do
       before(:each) do
-        course.update_attribute :min_participants, 2
+        course.update(min_participants: 2)
         course.students << student1
       end
 
